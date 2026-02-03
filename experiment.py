@@ -1,10 +1,24 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.datasets import make_blobs
+from sklearn.cluster import KMeans
 
 from kmeans_custom import CustomKMeans
 
+# Synthetic Data Generation
+X, _ = make_blobs(
+    n_samples=200,
+    centers=4,
+    n_features=2,
+    cluster_std=1.2,
+    random_state=42
+)
+df = pd.DataFrame(X, columns=["feature_1", "feature_2"])
+df.to_csv("data/synthetic_customer_data.csv", index=False)
+
 # Step 1: Load dataset
-data = pd.read_csv("data\synthetic_customer_data.csv")
+data = pd.read_csv("data/synthetic_customer_data.csv")
+X = data.values
 
 # Step 2: Select numerical columns only
 X = data.select_dtypes(include=["number"]).values
@@ -29,7 +43,6 @@ plt.savefig("plots/custom_kmeans.png")
 plt.show()
 
 # Step 4: Run Scikit-learn KMeans
-from sklearn.cluster import KMeans
 
 sklearn_kmeans = KMeans(n_clusters=4, random_state=42)
 sklearn_kmeans.fit(X)
